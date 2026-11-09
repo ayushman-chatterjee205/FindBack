@@ -34,7 +34,13 @@ jobs:
           USE_SQLITE: "true"
           DATABASE_URL: "sqlite+aiosqlite:///./findback_test.db"
         run: |
-          python -m pytest backend/tests -v -s --tb=short
+          python -m pytest backend/tests -v -s --tb=short 2>&1 | tee pytest.log || {
+            echo "## ❌ Pytest Failure Output" >> $GITHUB_STEP_SUMMARY
+            echo '```text' >> $GITHUB_STEP_SUMMARY
+            cat pytest.log >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            exit 1
+          }
 
   frontend-build:
     name: Frontend Build (Next.js)
