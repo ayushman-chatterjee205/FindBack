@@ -18,8 +18,7 @@ ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "
 CANONICAL_DB_FILE = os.path.join(ROOT_DIR, "findback_dev.db").replace("\\", "/")
 
 if os.getenv("TESTING"):
-    test_db = os.path.join(ROOT_DIR, "findback_test.db").replace("\\", "/")
-    db_url = f"sqlite+aiosqlite:///{test_db}"
+    db_url = "sqlite+aiosqlite:///./findback_test.db"
 elif os.getenv("USE_SQLITE") or not os.getenv("DATABASE_URL") or not has_asyncpg:
     db_url = f"sqlite+aiosqlite:///{CANONICAL_DB_FILE}"
 

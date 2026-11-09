@@ -33,8 +33,7 @@ jobs:
           TESTING: "true"
           USE_SQLITE: "true"
         run: |
-          cd backend
-          python -m pytest -v
+          python -m pytest backend/tests/ -v
 
   frontend-build:
     name: Frontend Build (Next.js)

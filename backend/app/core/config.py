@@ -1,7 +1,7 @@
 import os
 from typing import List, Union
-from pydantic_settings import BaseSettings
-from pydantic import AnyHttpUrl, validator
+from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic import field_validator, ValidationInfo
 
 class Settings(BaseSettings):
     PROJECT_NAME: str = "FindBack"
@@ -45,15 +45,18 @@ class Settings(BaseSettings):
     WEIGHT_TEMPORAL: float = 0.15
     MATCH_NOTIFICATION_THRESHOLD: float = 75.0
 
-    @validator("JWT_SECRET")
-    def validate_jwt_secret(cls, v: str, values: dict) -> str:
-        env = values.get("ENVIRONMENT", "development")
+    @field_validator("JWT_SECRET")
+    @classmethod
+    def validate_jwt_secret(cls, v: str, info: ValidationInfo) -> str:
+        env = info.data.get("ENVIRONMENT", "development") if info.data else "development"
         if env == "production" and ("change_in_production" in v or len(v) < 32):
             raise ValueError("Insecure default JWT_SECRET detected in production! Must be configured with >=32 random characters.")
         return v
 
-    class Config:
-        env_file = ".env"
-        case_sensitive = True
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        case_sensitive=True,
+        extra="ignore"
+    )
 
 settings = Settings()
