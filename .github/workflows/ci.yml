@@ -27,13 +27,12 @@ jobs:
 
       - name: Run Pytest
         env:
-          PYTHONPATH: backend
           USE_LOCAL_MODELS: "true"
           JWT_SECRET: "ci_testing_secret_key_32_characters_long_min"
           TESTING: "true"
           USE_SQLITE: "true"
         run: |
-          python -m pytest backend/tests/ -v
+          python -m pytest -v --tb=short
 
   frontend-build:
     name: Frontend Build (Next.js)

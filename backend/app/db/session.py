@@ -1,6 +1,7 @@
 import os
 from typing import AsyncGenerator
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
+from sqlalchemy.pool import StaticPool
 from app.core.config import settings
 
 # Determine database engine URL:
@@ -22,12 +23,21 @@ if os.getenv("TESTING"):
 elif os.getenv("USE_SQLITE") or not os.getenv("DATABASE_URL") or not has_asyncpg:
     db_url = f"sqlite+aiosqlite:///{CANONICAL_DB_FILE}"
 
-engine = create_async_engine(
-    db_url,
-    echo=False,
-    future=True,
-    pool_pre_ping=True if "sqlite" not in db_url else False,
-)
+if "sqlite" in db_url:
+    engine = create_async_engine(
+        db_url,
+        echo=False,
+        future=True,
+        poolclass=StaticPool,
+        connect_args={"check_same_thread": False, "timeout": 30},
+    )
+else:
+    engine = create_async_engine(
+        db_url,
+        echo=False,
+        future=True,
+        pool_pre_ping=True,
+    )
 
 async_session_factory = async_sessionmaker(
     bind=engine,
