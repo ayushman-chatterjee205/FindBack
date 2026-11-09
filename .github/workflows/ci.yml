@@ -18,6 +18,7 @@ jobs:
         with:
           python-version: "3.11"
           cache: "pip"
+          cache-dependency-path: backend/requirements.txt
 
       - name: Install Dependencies
         run: |
@@ -26,11 +27,14 @@ jobs:
 
       - name: Run Pytest
         env:
+          PYTHONPATH: backend
           USE_LOCAL_MODELS: "true"
           JWT_SECRET: "ci_testing_secret_key_32_characters_long_min"
+          TESTING: "true"
+          USE_SQLITE: "true"
         run: |
           cd backend
-          pytest -v
+          python -m pytest -v
 
   frontend-build:
     name: Frontend Build (Next.js)

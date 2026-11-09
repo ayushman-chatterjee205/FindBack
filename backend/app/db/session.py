@@ -9,6 +9,7 @@ from app.core.config import settings
 db_url = settings.DATABASE_URL
 has_asyncpg = False
 try:
+    import asyncpg
     has_asyncpg = True
 except ImportError:
     has_asyncpg = False
@@ -16,7 +17,10 @@ except ImportError:
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
 CANONICAL_DB_FILE = os.path.join(ROOT_DIR, "findback_dev.db").replace("\\", "/")
 
-if not has_asyncpg or os.getenv("TESTING") or os.getenv("USE_SQLITE") or not os.getenv("DATABASE_URL"):
+if os.getenv("TESTING"):
+    test_db = os.path.join(ROOT_DIR, "findback_test.db").replace("\\", "/")
+    db_url = f"sqlite+aiosqlite:///{test_db}"
+elif os.getenv("USE_SQLITE") or not os.getenv("DATABASE_URL") or not has_asyncpg:
     db_url = f"sqlite+aiosqlite:///{CANONICAL_DB_FILE}"
 
 engine = create_async_engine(
