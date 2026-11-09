@@ -11,8 +11,8 @@ from app.core.config import settings
 from app.db.session import get_db
 from app.models.user import User
 
-# Password Context using Argon2 with bcrypt fallback
-pwd_context = CryptContext(schemes=["argon2", "bcrypt"], deprecated="auto")
+# Password Context using Argon2 (modern high-security hashing)
+pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{settings.API_V1_STR}/auth/login")
 oauth2_scheme_optional = OAuth2PasswordBearer(tokenUrl=f"{settings.API_V1_STR}/auth/login", auto_error=False)

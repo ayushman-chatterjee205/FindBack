@@ -20,6 +20,12 @@ class ModelLoader:
         """Prewarm transformer models into memory during FastAPI lifespan startup."""
         if self._is_warmed:
             return
+
+        if os.getenv("TESTING") or os.getenv("CI"):
+            self._text_model = None
+            self._is_warmed = True
+            return
+
         try:
             from sentence_transformers import SentenceTransformer
             self._text_model = SentenceTransformer("all-MiniLM-L6-v2")

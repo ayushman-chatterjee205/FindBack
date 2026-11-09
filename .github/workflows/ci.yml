@@ -27,12 +27,14 @@ jobs:
 
       - name: Run Pytest
         env:
+          PYTHONPATH: backend
           USE_LOCAL_MODELS: "true"
           JWT_SECRET: "ci_testing_secret_key_32_characters_long_min"
           TESTING: "true"
           USE_SQLITE: "true"
+          DATABASE_URL: "sqlite+aiosqlite:///./findback_test.db"
         run: |
-          python -m pytest -v --tb=short
+          python -m pytest backend/tests -v -s --tb=short
 
   frontend-build:
     name: Frontend Build (Next.js)
