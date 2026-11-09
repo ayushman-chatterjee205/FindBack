@@ -127,6 +127,17 @@ async def submit_ownership_claim(
     )
     db.add(claim)
 
+    # In-app notification for the student
+    notif = Notification(
+        id=str(uuid.uuid4()),
+        user_id=current_user.id,
+        title="Ownership Claim Submitted 📋",
+        message="Your claim has been submitted. Campus security will review your proof of ownership at the Central Block Vault.",
+        link_url="/my-reports",
+        type="claim"
+    )
+    db.add(notif)
+
     # Log audit entry
     audit = AuditLog(
         id=str(uuid.uuid4()),
@@ -288,6 +299,16 @@ async def review_ownership_claim(
             user_id=claim.student_id,
             title="Ownership Claim Approved! 🎉",
             message="Your ownership proof was verified. Generate your digital pickup pass to collect your item.",
+            link_url="/my-reports",
+            type="claim"
+        )
+        db.add(notif)
+    elif status_val == "REJECTED":
+        notif = Notification(
+            id=str(uuid.uuid4()),
+            user_id=claim.student_id,
+            title="Ownership Claim Update",
+            message="Your ownership claim was reviewed by campus security but could not be verified with the provided details.",
             link_url="/my-reports",
             type="claim"
         )

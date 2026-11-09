@@ -53,6 +53,18 @@ class ApiClient {
     }
     return res.json();
   }
+
+  async delete<T>(endpoint: string): Promise<T> {
+    const res = await fetch(`${API_BASE_URL}${endpoint}`, {
+      method: "DELETE",
+      headers: this.getHeaders(),
+    });
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({}));
+      throw new Error(errorData.detail || `Request failed with status ${res.status}`);
+    }
+    return res.json();
+  }
 }
 
 export const api = new ApiClient();

@@ -4,12 +4,14 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import { useNotifications } from "@/context/NotificationContext";
 import { Home, Search, ClipboardList, Bell, User, Box, ShieldCheck, KeyRound } from "lucide-react";
 import { SignInRequiredModal } from "@/components/SignInRequiredModal";
 
 export const BottomNav: React.FC = () => {
   const pathname = usePathname();
   const { user, isLoading } = useAuth();
+  const { unreadCount } = useNotifications();
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
 
   if (isLoading || pathname === "/login" || pathname === "/register") {
@@ -75,8 +77,8 @@ export const BottomNav: React.FC = () => {
             >
               <div className="relative">
                 <Icon className={`w-5 h-5 transition-transform ${isActive ? "scale-110 stroke-[2.2]" : "stroke-[1.7]"}`} />
-                {tab.label === "Alerts" && (
-                  <span className="absolute -top-0.5 -right-1 w-2 h-2 rounded-full bg-findback-accent ring-2 ring-[#F4F7FB]" />
+                {tab.label === "Alerts" && unreadCount > 0 && (
+                  <span className="absolute -top-0.5 -right-1 w-2.5 h-2.5 rounded-full bg-findback-accent ring-2 ring-[#F4F7FB]" />
                 )}
               </div>
               <span className="text-[10px] mt-0.5 whitespace-nowrap">{tab.label}</span>

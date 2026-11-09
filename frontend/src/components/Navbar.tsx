@@ -8,6 +8,7 @@ import { useAuth } from "@/context/AuthContext";
 import { Search, PlusCircle, Bell, User as UserIcon, Shield, Box, AlertCircle, X, ChevronDown, CheckCircle2, Layers } from "lucide-react";
 import { api } from "@/lib/api";
 import { SignInRequiredModal } from "@/components/SignInRequiredModal";
+import { NotificationBell } from "@/components/NotificationBell";
 
 /**
  * Computes dynamic navbar background color matching the Split Hero gradient as user scrolls
@@ -426,18 +427,7 @@ export const Navbar: React.FC = () => {
 
           {/* Notifications Icon */}
           {user ? (
-            <Link
-              href="/notifications"
-              className={`p-1.5 lg:p-2 rounded-lg transition-colors duration-300 relative shrink-0 ${
-                isLightNav
-                  ? "text-findback-muted hover:text-findback-text hover:bg-black/5 border border-transparent hover:border-findback-border"
-                  : "text-white/85 hover:text-white hover:bg-white/15 border border-transparent hover:border-white/20"
-              }`}
-              title="Notifications"
-            >
-              <Bell className="w-4 h-4" />
-              <span className={`absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-emerald-400 ring-2 ${isLightNav ? "ring-[#F4F7FB]" : "ring-[#215194]"}`} />
-            </Link>
+            <NotificationBell isLightNav={isLightNav} />
           ) : (
             <button
               onClick={() => setIsSignInModalOpen(true)}
@@ -449,7 +439,6 @@ export const Navbar: React.FC = () => {
               title="Notifications (Sign in required)"
             >
               <Bell className="w-4 h-4" />
-              <span className={`absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-emerald-400 ring-2 ${isLightNav ? "ring-[#F4F7FB]" : "ring-[#215194]"}`} />
             </button>
           )}
 

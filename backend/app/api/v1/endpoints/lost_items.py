@@ -1,3 +1,4 @@
+import uuid
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -7,6 +8,7 @@ from app.db.session import get_db
 from app.core.security import get_current_user, get_optional_current_user
 from app.models.user import User
 from app.models.item import LostItem
+from app.models.notification import Notification
 from app.models.match import MatchCandidate
 from app.schemas.item import LostItemCreate, LostItemResponse
 from app.ai_engine.text_embedder import generate_text_embedding
@@ -54,6 +56,19 @@ async def report_lost_item(
 
     # Run AI matching sweep
     created_matches = await scan_and_match_lost_item(db, lost_item)
+
+    # If no immediate high-scoring match was found, record registration notification
+    if not created_matches:
+        reg_notif = Notification(
+            id=str(uuid.uuid4()),
+            user_id=current_user.id,
+            title="Lost Item Registered 📍",
+            message=f"Your report for '{item_in.title}' is active. Our AI engine is scanning custody inventory across campus blocks.",
+            link_url="/my-reports",
+            type="info"
+        )
+        db.add(reg_notif)
+        await db.commit()
 
     response = LostItemResponse.model_validate(lost_item)
     response.matches_count = len(created_matches)

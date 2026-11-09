@@ -117,14 +117,6 @@ export default function ContactPage() {
                   <div className="text-slate-500">08:30 AM – 06:30 PM (IST)</div>
                 </div>
               </div>
-
-              <div className="flex items-start space-x-2.5">
-                <Phone className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
-                <div>
-                  <span className="font-semibold text-slate-800">Campus Internal Ext: </span>
-                  <span className="font-mono text-slate-900 font-bold">2101</span>
-                </div>
-              </div>
             </div>
           </div>
 
@@ -148,19 +140,18 @@ export default function ContactPage() {
 
               <div className="p-3 rounded-2xl bg-white border border-slate-200/80">
                 <div className="font-bold text-slate-900">Main Security Gate 1 Post</div>
-                <div className="text-slate-500 text-[11px] mt-0.5">Campus Main Entrance · 24/7 Control Room (+91 33 2443 0454)</div>
+                <div className="text-slate-500 text-[11px] mt-0.5">Campus Main Entrance · 24/7 </div>
               </div>
             </div>
 
             {/* Official Support Email */}
             <div className="mt-4 pt-4 border-t border-slate-200 flex items-center justify-between text-xs">
               <span className="text-slate-500">Official Portal Support:</span>
-              <a
-                href="mailto:findback-support@heritageit.edu"
-                className="font-medium text-blue-600 hover:text-blue-700 underline"
+              <span
+                className="text-slate-500"
               >
-                findback-support@heritageit.edu
-              </a>
+                Coming Soon...
+              </span>
             </div>
           </div>
 
@@ -232,7 +223,7 @@ export default function ContactPage() {
                     required
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
-                    placeholder="e.g. Ayushman Chatterjee"
+                    placeholder="e.g. Rahul Sen"
                     className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                   />
                 </div>
@@ -261,7 +252,7 @@ export default function ContactPage() {
                     type="text"
                     value={rollNumber}
                     onChange={(e) => setRollNumber(e.target.value)}
-                    placeholder="e.g. 2563002"
+                    placeholder="e.g. 253101"
                     className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                   />
                 </div>
